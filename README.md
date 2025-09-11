@@ -9,7 +9,7 @@
   - **SNS**
   - **CloudMap**
   - **Secrets Manager**
-  - **AWS Cognito**
+  - **AWS Cognito**6
 
 ## Architectural patterns for microservices: 
   - **API Gateway**
@@ -43,10 +43,10 @@
 ## Configure a named CLI profile in Powershell or CMD for your machine, not within a virtual environment
   - `aws configure --profile course-admin`
     - After running the command, enter:
-      - AWS Access Key ID: (from the .csv)
-      - AWS Secret Access Key: (from the .csv)
-      - Default region name: eu-west-2
-      - Default output format: json
+      - **AWS Access Key ID:** _**(from the .csv)**_
+      - **AWS Secret Access Key:** _**(from the .csv)**_
+      - **Default region name:** _**eu-west-2**_
+      - **Default output format:** _**json**_
     - This writes two files for your Windows user:
       - %UserProfile%\.aws\credentials
       - %UserProfile%\.aws\config
@@ -54,17 +54,65 @@
       - `aws sts get-caller-identity --profile course-admin`
       - If it returns your UserId, Account, and Arn, then your local IAM profile is working.
         - From there your Python project (with boto3) can use it.
-
-
-Default output format: json
-  - 
-  - To use the profile within a Python project boto3 is used
-
 ## Verify AWS CLI on Windows
  - `aws --version`
    - You should see something like `aws-cli/2.x.x`
- - 
-# Identify and Access Management: AWS Cognito
+ 
+# User Identity and Access Management: AWS Cognito
+## Typical microservice architecture including (Identity Provider) IDP
+![Dashboard](images/Typical%20microservice%20architecture.png)
+- **AWS Cognito:** 
+  - Provides user identity and user authentication through email or federated access.
+    - Federated access means the credentials are created outside of AWS Cognito.
+  - Users can have attributes (E.g Name, address, phone number) and/or groups association
+    - Groups can act as roles for a users, for role based authorisation.
+  - Users are created manually my an admin or through a sign-up page.
+  - Provides a built-in (hosted) sign-up and login page for web application, saving time.
+  - Logins are based on the Open Authentication 2 protocol (OAuth 2.0).
+
+## Setting up AWS Cognito for Hotel Booking System
+- login:
+  - signin.aws.amazon.com
+  - Sign into console 
+  - Sign in using root user
+  - Search for **Cognito**
+- Click hamburger menu (3 lines)
+  - user pools 
+  - Create **User pool**
+    - Application Type: 
+      - Traditional web application
+    - Name your application: 
+      - Python-Microservice-on-AWS
+    - Configure options: 
+      - E-mail
+    - Required attributes for sign-up (OAuth2 Attributes): 
+      - e-mail
+      - given_name
+      - family_name
+      - address
+    - Add a return URL
+      - http://localhost:8080/hotel
+    - Click on:
+      - Create user directory
+    - Click on:
+      - Go to overview
+- Rename
+  - user pool name:
+    - hotel-booking-users
+- Users pools can have multiple apps:
+  - Applications
+    - Client Apps
+    - Click on created app:
+      - python-microservies-on-aws
+        - The application configuration
+          - Note: client ID
+
+## Sign in with AWS Cognito
+
+
+## Adding a Page for Creating Hotels
+
+
 
 # API Gateway
 
