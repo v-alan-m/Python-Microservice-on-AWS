@@ -102,10 +102,50 @@
 - Users pools can have multiple apps:
   - Applications
     - Client Apps
-    - Click on created app:
-      - python-microservies-on-aws
-        - The application configuration
-          - Note: client ID
+    - Click on created app: python-microservies-on-aws
+      - The application configuration
+        - Note: client ID (aws_test_1_accessKeys.csv)
+        - client secret: Not needed as we are using the AWS hosted site
+        - Login Pages
+          - Edit:
+            - OAuth 2.0 grant types
+              - Deselect: Authorization code grant
+              - Select: Implicit grant (to use the AWS hosted UI)
+              - OpenID connect scopes
+                - OpenID: Keep to be given an ID token
+                - Add: Profile
+                  - To access user information
+              - Click on Save changes
+  - Domain
+    - Note: Cognito domain (aws_test_1_accessKeys.csv)
+    - If using our own site:
+      - Actions -> Create custom domain
+   User Mangement
+    - Users
+      - Create user
+        - Email address:
+          - Eg. admin@mydomain.com
+            - Mark email as verified
+        - Password:
+          - Eg. Thefastway777!
+        - Click on Create user
+    - Groups
+      - Create group
+        - Group name:
+          - Admin
+            - Crate the hotels and upload the images
+        - Click on Create group
+      - Create group
+        - Group name:
+          - HotelManager
+            - View the bookings and accept the bookings
+        - Click on Create group
+      - Select the group name
+        - Admin
+          - Add user to group
+            - Select user
+            - Add
+        - Hotel Manager
 
 ## Sign in with AWS Cognito
 
