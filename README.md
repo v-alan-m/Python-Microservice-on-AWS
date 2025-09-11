@@ -148,7 +148,11 @@
         - Hotel Manager
 
 ## Sign in with AWS Cognito
-
+- Use JS for connecting to Cognito to speed up development and have greater user interactions and security.
+  - Insert into coginito.jw:
+    - **User pool ID** into **identityPoolId**
+    - Domain -> **Custom domain** into **cognitoDomain** (remove https://)
+    - Application -> python-microservices-on-aws -> **ClientID** into **appId**
 
 ## Adding a Page for Creating Hotels
 

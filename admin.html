@@ -1,0 +1,17 @@
+<!-- admin.html for adding information.-->
+<html>
+<head>
+    <title>Admin Page</title>
+</head>
+<body>
+    <button id="btnSignIn">Sign In</button>
+    <button id="btnSignOut">Sign Out</button>
+
+    <script>
+        $(function () {
+            cognitoApp.Init();   // Initialize Cognito authentication
+            pageLoad();         // Load page-specific logic
+        });
+    </script>
+</body>
+</html>
