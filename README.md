@@ -155,9 +155,13 @@
     - Application -> python-microservices-on-aws -> **ClientID** into **appId**
 
 ## Adding a Page for Creating Hotels
-
-
-
+- addHotel.html: A page where a hotel administrator can create new hotels, into the system.
+    - Name
+    - Star rating
+    - City
+    - Picture
+    - Price per night
+    
 # API Gateway
 
 # Serverless Microservices
