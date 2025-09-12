@@ -23,6 +23,12 @@
 ## Flowchart
 ![Dashboard](images/Flowchart.png)
 
+# Run the HTML code 
+- Run on port 8080, not Pycharm Jetbrain's localhost: 63342
+  - `python -m http.server 8080`
+  - Navigate to a specific webpage:
+    - `python -m webbrowser -t "http://localhost:8080/hotel/addHotel.html"`
+
 # AWS Setup
 ## Create AWS account
 - Go to aws.amazon.com/free → start sign-up
@@ -60,7 +66,7 @@
  
 # User Identity and Access Management: AWS Cognito
 ## Typical microservice architecture including (Identity Provider) IDP
-![Dashboard](images/Typical%20microservice%20architecture.png)
+![Dashboard](images/Typical microservice architecture.png)
 - **AWS Cognito:** 
   - Provides user identity and user authentication through email or federated access.
     - Federated access means the credentials are created outside of AWS Cognito.
@@ -113,6 +119,7 @@
               - Select: Implicit grant (to use the AWS hosted UI)
               - OpenID connect scopes
                 - OpenID: Keep to be given an ID token
+                - Remove: Phone
                 - Add: Profile
                   - To access user information
               - Click on Save changes
@@ -163,8 +170,101 @@
     - Price per night
     
 # API Gateway
+## API Gateway Pattern
+  - Stops the consumer of a Microservice from directly accessing it.
+  - Simplifies the system's interface by combining multiple APIs to one:
+    - Instead of being dependent on multiple APIs it's only depandent on one API exposed by the gateway.
+  - Can perform authentication and authorisation
+    - Code doesn't have to be duplicated in every microservice.
+  - Simplifies monitoring.
+    - Code doesn't have to be duplicated in every microservice.
+  - Simplifies catalogue and documentation.
+    - As APIs are not scattered amongst the network and infrastructure, they are in all in the API gateway.
+
+## Creating a Mock API and AWS API Gateway
+```HTML
+    <!-- replace the 'action' attribute in the form below to the API's URL -->
+    <div class="container">
+        <form id="upload-form" enctype="multipart/form-data"
+         method="post" action="<api url here>">
+```
+- Search and click on -> **API Gateway**
+  - Create API
+  - REST API
+    - Build
+      - New API
+      - API name: NewHotel
+      - Description: Add description of API
+      - Endpoint Type: Leave as Regional -> Edge optimisation to be done later.
+      - Create API
+- Resources: All the API definitions will be here.
+- Stages: To create the actual APIs, the resources must be deployed in stages.
+- Create method
+  - Method type: POST
+  - Integration type: Mock (when you don't have the microservice build yet, but you can test the API).
+  - Create method
+    - Can click on the test menu and click Test and look for a status code of 200.
+  - Deploy API
+    - Deployment stage: E.g **New stage** or could be **Test** or **Production**
+    - Stage name: Test
+    - Deploy
+  - To use the API: Invoke URL value
+    - Paste this URL into action within the respective HTML section (E.g. **action** value) 
+  - When entering details for a new hotel with an image, we get a 500 response
+    - To fix this we go to:
+    - Resources
+    - Post
+    - Top Integration request
+      - Edit
+      - Mapping templates
+        - In our HTML (addHotel.HTML) we have:
+        - `enctype="multipart/form-data"`
+        - Add into mapping templates values: **multipart/form-data**
+        - Template body: `{"statusCode": 200}`
+        - Save
+    - Deploy API again, as not deploying will not update the changes
+      - Deploy
+
+## Authenticating API Requests
+- Currently, the API is available to the public.
+  - This Admin API should only been available to authorised admin users.
+- Authorizers
+  - Create an authorizer
+  - Name: **NewHotelAuth**
+  - Type: Cognito (we can use the Cognito identity pool to authenticate users).
+    - We can authorise users later using a Lambda function.
+  - Cognito user pool: Select from available pools -> hotel-booking-users
+  - Token source: Authorization
+  - Create authorizer
+  - Click on new authorizer name: NewHotelAuth
+    - Token value -> Enter random string
+    - Click -> Test authorizer
+    - Authorizer test: NewHotelAuth 401
+    - We need to build an authorizer using a Lambda function:
+      - Resources -> Find method -> Post
+        - Click on -> First **Method request**
+        - Default: Authorization NONE
+        - Click **Edit** -> Change to **NewHotelAuth**
+        - Save -> Deploy API -> Stage: Test -> Deploy
+        - You will get a 401 as HTTP headers can not be set it:
+          - ```HTML
+            <div class="container">
+            <form id="upload-form" enctype="multipart/form-data" method="post" action="https://q1qlp35y7j.execute-api.eu-west-2.amazonaws.com/Test">
+            ````
+          - We need to add a header, in an AJAX manner:
+            - In a larger project the AJAX logic should account for this.
+              - In this project this function: setAuthHeader() will handle this
+              - In addHotel.html if this function is called before the page is loaded it will achieve the same goal.
+                - Seeing as it adds the bearer token the header.
+                - ```HTML 
+                  setAuthHeader();
+                  $("#userId").val(currentUserToken.currentUserId);
+                  $("#idToken").val(currentUserToken.idToken);
+                  ```
+              - 
 
 # Serverless Microservices
+
 
 # Containerised Microservices
 

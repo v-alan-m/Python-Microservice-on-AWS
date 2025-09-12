@@ -15,7 +15,7 @@ var cognitoApp={
         var authData = {
             ClientId : config.cognito.appId,
             AppWebDomain : config.cognito.cognitoDomain,
-            TokenScopesArray : ['email', 'openid'],
+            TokenScopesArray : ['email', 'openid', 'profile'],
             RedirectUriSignIn : 'http://localhost:8080/hotel/',
             RedirectUriSignOut : 'http://localhost:8080/hotel/',
             UserPoolId : config.cognito.identityPoolId,

@@ -1,12 +1,17 @@
 <!-- admin.html for adding information.-->
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="scripts/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="scripts/amazon-cognito-auth.js"></script>
+    <script src="scripts/cognito.js"></script>
+    <script src="scripts/main.js"></script>
+
     <title>Admin Page</title>
 </head>
 <body>
     <button id="btnSignIn">Sign In</button>
     <button id="btnSignOut">Sign Out</button>
-
     <script>
         $(function () {
             cognitoApp.Init();   // Initialize Cognito authentication

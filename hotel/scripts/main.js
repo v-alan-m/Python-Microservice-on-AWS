@@ -66,34 +66,21 @@ function pageLoad()
             return JSON.parse(jsonPayload);
         }
 
-function setAuthHeader()
-{
+function setAuthHeader() {
+  form = $("form");
+  form.submit(function (event) {
+    event.preventDefault(); // prevent the form from submitting normally
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", form.attr("action"));
+    xhr.setRequestHeader("Authorization", "Bearer " + currentUserToken.idToken);
+    xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        console.log(xhr.responseText);
+      }
+    };
 
-    var forms= $('form');
-    forms.submit(function(event) {
+    xhr.send(form.serialize());
+  });
 
-        // Stop the form from submitting normally
-        event.preventDefault();
-
-        // Get form data
-        var formData = new FormData($(this)[0]);
-        console.log(formData);
-        // Set up the AJAX request
-        $.ajax({
-
-          url: $(this).attr('action'),
-          type: 'POST',
-          beforeSend: function(request) {
-            request.setRequestHeader('Authorization', 'Bearer '+ currentUserToken.idToken);
-            //request.setRequestHeader('Content-type', 'multipart/form-data; boundary=---------------------------' + new Date().getTime());
-          },
-          data: formData,
-          contentType:false,
-          processData: false,
-          success: function(response) {
-
-            window.location.href='/hotel/admin.html';
-          }
-        });
-      });
 }
