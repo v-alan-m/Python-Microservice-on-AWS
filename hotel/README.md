@@ -243,10 +243,10 @@
     - We need to build an authorizer using a Lambda function:
       - Resources -> Find method -> Post
         - Click on -> First **Method request**
-        - Default: Authorization NONE
         - Click **Edit** -> Change to **NewHotelAuth**
-        - Save -> Deploy API -> Stage: Test -> Deploy
-        - You will get a 401 as HTTP headers can not be set it:
+        - Authorization value: Empty (Default)
+        - Save -> **Deploy API** -> Stage: **Test** -> **Deploy**
+        - Will return a **401** status code as HTTP header does not have an authorization token:
           - ```HTML
             <div class="container">
             <form id="upload-form" enctype="multipart/form-data" method="post" action="https://q1qlp35y7j.execute-api.eu-west-2.amazonaws.com/Test">
@@ -261,7 +261,13 @@
                   $("#userId").val(currentUserToken.currentUserId);
                   $("#idToken").val(currentUserToken.idToken);
                   ```
-              - 
+        - Click on -> First **Method request**
+        - Click **Edit** -> Change to **NewHotelAuth**
+        - Within the browser -> click on **Console** -> **idToken** value
+        - Default: Authorization value: **idToken**
+        - Save -> **Deploy API** -> Stage: **Test** -> **Deploy**
+        - Will return a **200** status code as HTTP header has an authorization token.
+    
 
 # Serverless Microservices
 
