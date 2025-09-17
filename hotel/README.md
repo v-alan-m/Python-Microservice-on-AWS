@@ -268,6 +268,37 @@
         - Save -> **Deploy API** -> Stage: **Test** -> **Deploy**
         - Will return a **200** status code as HTTP header has an authorization token.
     
+## Adding CORS (Cross-origin Resource Sharing) header to APIs
+- Certain headers must be presented within the response.
+  - Those headers indicate whether the domain is trustworthy.
+    - This policy is there to protect our API from being invoked from a domain we don't trust
+      - The header value we must include is: Access-Control-Allow-Origin
+  - To do this go to **Resources**:
+    - API (post)
+    - Click on -> **Enable-CORS**
+    - Access-Control-Allow-Origin: Is * here. but usually we don't include all using * we specify our target fields for increased security.
+    - Click on -> Save
+      - This will create an OPTIONS API, which is called by the browser to check if the CORS headers are presented.
+      - Options -> Integrations request -> Edit
+        - Mapping templates: 
+          ```json
+          {"statusCode": 200,
+           "headers": {
+                "ACCESS-CONTROL-ALLOW-Headers": "*",
+                "ACCESS-CONTROL-ALLOW-Origin": "*",
+                "ACCESS-CONTROL-ALLOW-Methods": "OPTIONS,POST"
+                }}
+          ```
+          - Click on -> Save
+          - Click on -> Deploy API
+            - Stage: Test
+            - Click on -> Deploy
+- Go to: http://localhost:8080/hotel/addHotel.html
+  - Using: 
+    1. python -m http.server 8080
+    2. python -m webbrowser -t "http://localhost:8080/hotel/addHotel.html"
+  - Create a new entry and now the request will return **status code** of **200**.
+
 
 # Serverless Microservices
 
