@@ -19,9 +19,9 @@
 
 # Hotel Booking Project
 ## Overview
-![Dashboard](images/Overview.png)
+![Dashboard](hotel/images/Overview.png)
 ## Flowchart
-![Dashboard](images/Flowchart.png)
+![Dashboard](hotel/images/Flowchart.png)
 
 # Run the HTML code 
 - Run on port 8080, not Pycharm Jetbrain's localhost: 63342
@@ -66,7 +66,7 @@
  
 # User Identity and Access Management: AWS Cognito
 ## Typical microservice architecture including (Identity Provider) IDP
-![Dashboard](images/Typical microservice architecture.png)
+![Dashboard](hotel/images/Typical microservice architecture.png)
 - **AWS Cognito:** 
   - Provides user identity and user authentication through email or federated access.
     - Federated access means the credentials are created outside of AWS Cognito.
