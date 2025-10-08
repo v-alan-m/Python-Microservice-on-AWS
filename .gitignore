@@ -1,0 +1,3 @@
+# .gitignore
+.venv/
+hotel/images/aws_test_1_accessKeys.csv
