@@ -25,9 +25,18 @@
 
 # Run the HTML code 
 - Run on port 8080, not Pycharm Jetbrain's localhost: 63342
-  - `python -m http.server 8080`
+  - Start the server:
+    - ```bash
+      python -m http.server 8080
+      ```
+  - Log in through the admin page:
+    - ```bash
+      python -m webbrowser -t "http://localhost:8080\hotel\admin.html"
+      ``` 
   - Navigate to a specific webpage:
-    - `python -m webbrowser -t "http://localhost:8080/hotel/addHotel.html"`
+    - ```bash
+      python -m webbrowser -t "http://localhost:8080/hotel/addHotel.html"
+      ```
 
 # AWS Setup
 ## Create AWS account
