@@ -302,14 +302,17 @@
           - Click on -> Deploy API
             - Stage: Test
             - Click on -> Deploy
+            - Once deployed, OPTIONS shows up in stages
 - Go to: http://localhost:8080/hotel/addHotel.html
   - Using: 
     1. python -m http.server 8080
     2. python -m webbrowser -t "http://localhost:8080/hotel/addHotel.html"
   - Create a new entry and now the request will return **status code** of **200**.
 
-
 # Serverless Microservices
+- Parses the information from the submitted form
+- Add it to a database
+
 
 
 # Containerised Microservices
