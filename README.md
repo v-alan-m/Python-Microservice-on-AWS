@@ -309,13 +309,85 @@
     2. python -m webbrowser -t "http://localhost:8080/hotel/addHotel.html"
   - Create a new entry and now the request will return **status code** of **200**.
 
-# Serverless Microservices
+# Building Serverless Microservices
 - Parses the information from the submitted form
 - Add it to a database
 
+## Microservice Chassis: Serverless and Containerisation
 
 
-# Containerised Microservices
+## Creating and Deploying as AWS Lambda Microservice
+
+
+## Capturing the Request Body in AWS Lambda as an API Backend
+
+
+## Performing Authorisation in a Backend-Lambda
+
+
+## Storing Data and Files in AWS
+
+
+## Creating an Execution IAM Role for Lambda
+
+
+## Create and Configure S3 Buckets
+
+
+## Uploading Files and Images to AWS S3
+
+
+## Creating and Configuring a DynamoDB Table
+
+
+## Storing Information in DynamoDB
+
+
+## Deploying AWS Lambda with Python Dependencies
+
+
+## Connecting API Gateway to Lambda using a Proxy Resource
+
+
+## Testing Proxy API with Lambda
+
+
+## Creating a RESTful GET API in API Gateway with a Lambda Microservice
+
+
+## Practice Creating and Configuring an AWS Lambda Function
+
+
+## Practice Creating a Proxy REST API in AWS API Gateway
+
+
+## Review Your Practice Results
+
+
+## Exploring JSON Web Tokens (JWT) and JSON Web Key Sets (JWKS)
+
+
+## Lambda Authorizer: Performing Authentication
+
+
+## Deploying and Using Lambda Authorizer with AWS API Gateway
+
+## The CORS Pattern
+
+
+## The "Fan Out" and "Idempotent Consumer" Pattern
+
+
+## Storing the Event Information in Elasticsearch
+
+
+## Practice: Deploy the Updater Service
+
+
+## Subscribing a Microservice to Event Bus
+
+
+# Building Containerised Microservices
 
 # Service Discovery
 
