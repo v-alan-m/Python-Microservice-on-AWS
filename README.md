@@ -313,11 +313,164 @@
 - Parses the information from the submitted form
 - Add it to a database
 
+
 ## Microservice Chassis: Serverless and Containerisation
 
 
+- One approach is to use duplicated templates for multiple microservices, E.g: _Order service_, _consumer service_, _xyz service_
+- Some **build logic** and **cross-cutting concerns** will be duplicated which is not efficient
+- **Cross-cutting concerns**: _Security_,  _External configurations_, _Logging and monitoring_, _Health check_, _Tracing_
+<br>
+<br>
+- We want to take out these cross-cutting concerns and leave them to another entity: this entity is called the **microservice chassis**
+    - _A framework that can be used as a foundation, for developing microservices_
+<br>
+<br>
+- We create a **service chassis** > **service template** > **xyz service**
+  - A service template can be used for a set of all the required services 
+  - The specifics are included when creating each individual microservice
+<br>
+<br>
+>- Service chassis
+>  - Build logic
+>  - Cross-cutting concerns
+```
+                    ⬇
+```               
+>- Service template
+>  - Template build logic
+>  - Template cross-cutting concerns
+>  - Sample Application logic
+```
+                    ⬇
+```
+>- Xyz Service
+>  - Template build logic _(minimal duplication)_
+>  - Template cross-cutting concerns _(minimal duplication)_
+>  - Service-specific build logic
+>  - Service-specific cross-cutting logic
+>  - Application logic
+
+### Serverless
+- Specific to cloud environments
+- The cloud provide (AWS) also provides the chassis (template, cross-cutting concerns, etc.)
+- Scaling out is based on usage: Done and controlled by AWS.
+- Fully integrated with other AWS services: IAM, Cloudwatch, etc.
+- We do not have access to the execution environment.
+- Development languages/frameworks are limited: Based on AWS compatibility.
+<br>
+<br>
+- AWS framework (chassis and template) for creating serverless microservices: **AWS Lambda**
+
+### Containerized
+- The application and its operating system are packaged into one image.
+  - E.g: **Docker image**.
+- Must be deployed to a container orchestration platform.
+  - E.g: **Kubernetes**
+- We have access to execution environment
+  - E.g: **SSH**
+- No limitation for development.
+  - E.g: **Languages or technologies**
+- Can support complex deployment scenarios effectively
+  - E.g: **Blue/Green deployment**
+<br>
+<br>
+- AWS platform (chassis and template) for creating container-based microservices: **Elastic Container Service (ECS)**
+  - AWS supports Kubernetes (as a managed service)
+
 ## Creating and Deploying as AWS Lambda Microservice
 
+- Lambda functions in AWS:
+> VPC (**default**: _access internet and other AWS services_)
+> 
+> - IAM Execution Role ▶ Permissions 
+>> Execution environment: 
+>>   - AWS Lambda ▶ Environment Variables (E.g. access to S3)
+- 2-way relationship: **IAM Execution Role** 🔁 **AWS Lambda**
+
+### Create a Lambda Function in AWS
+- Lambda -> Create function
+  - Function name: AddHotel
+  - Runtime: Python (latest version)
+  - Execution role: Create a new role with Basic Lambda permissions
+  - Click **Create function**
+
+- Two ways to enter the function:
+  - Create the function locally in IDE then zip it then use the **Upload from** button.
+    - Usually better as tests are run before uploading the function to AWS.
+  - Create it directly in the AWS Lambda function console.
+    - In this example we will enter it manually into the console, as it's a simple function.
+
+- AWS has not created a SDK for python, so we will use BOTO3
+  - Every **AWS Lambda function** requires a **handler**, we will rename it to: **lambda**
+  - Update the value in Runtime settings -> Edit -> Handler renamed to: **lambda_function.handler**
+```python
+import json
+import boto3
+
+def handler(event, context):
+    # CORS headers as we're not going to mock the API, so out API should return the CORS headers
+    headers = {
+      'Access-Control-Allow-Headers':'*',
+      'Access-Control-Allow-Origin':'*',
+      'Access-Control-Allow-Methods':'*'
+    }
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'headers': headers,
+        'body': json.dumps('Hello from Lambda!')
+    }
+```
+- Click **Deploy** -> We will see a green banner at the top of the page: Successfully updated the function **AddHotel**.
+- Click **Test** -> Create new test event -> **Event name**: Test -> Save
+  - Click on **Test** -> The output should have: **"statusCode": 200**
+  - In the test there will be a JSON -> {"key1": "value1", "key2": "value2", "key3": "value3"}
+  - To use the values from this JSON use **event**:
+```python
+import json
+import boto3
+
+def handler(event, context):
+    # CORS headers as we're not going to mock the API, so out API should return the CORS headers
+    headers = {
+      'Access-Control-Allow-Headers':'*',
+      'Access-Control-Allow-Origin':'*',
+      'Access-Control-Allow-Methods':'*'
+    }
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'headers': headers,
+        'body': json.dumps(event['key1'])
+    }
+```
+- Click **Deploy**
+- Click **Test** -> The output should have: **"body": "\"value1\""**
+- Setting logging logic -> The output should have: **[INFO] ... Some information will be presented.**:
+```python
+import json
+import boto3
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+def handler(event, context):
+    # CORS headers as we're not going to mock the API, so out API should return the CORS headers
+    headers = {
+      'Access-Control-Allow-Headers':'*',
+      'Access-Control-Allow-Origin':'*',
+      'Access-Control-Allow-Methods':'*'
+    }
+    logger.info('Some information will be presented.')
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'headers': headers,
+        'body': json.dumps(event['key1'])
+    }
+```
 
 ## Capturing the Request Body in AWS Lambda as an API Backend
 
@@ -372,6 +525,7 @@
 
 ## Deploying and Using Lambda Authorizer with AWS API Gateway
 
+
 ## The CORS Pattern
 
 
@@ -389,11 +543,159 @@
 
 # Building Containerised Microservices
 
+
+## The Search Microservice
+
+
+## Testing Search API Locally in IDE
+
+
+## Creating and testing a Docker Microservice
+
+
+## Pushing a Docker image to Amazon Elastic Container Registry (ECR)
+
+
+## Deploying a Microservice to AWS ECS with Fargate Launch Type
+
+
+## Creating a Proxy API for a Containerised Microservice
+
+
+## Creating an API for a Containerised Microservice with a Private IP
+
+
+## Search Microservice in Action
+
+
+## Introduction to the Circuit Breaker Pattern
+
+
+## Implementing Circuit Breaker Pattern in Search API
+
+
+## The Event Sourcing Pattern for Ultimate System Resiliency
+
+
+## Event Sourcing Microservice: Hotel Created Event Handler - Order Domain
+
+
+## Practice: Deploy Hotel Created Event Handler for Order Domain
+
+
+## Subscribing the Hotel Created Event Handler Order Domain to SNS Topic
+
+
+## Booking Microservice - Command
+
+
+## Deploying a Containerised Microservice with AWS Fargate Service Model
+
+
+## Creating and Securing an HTTP API and AWS API Gateway
+
+
+## CORS: Building a Query Microservice with Docker and ECS
+
+
+
 # Service Discovery
+
+
+## The Service Discovery Pattern and AWS Cloud Map
+
+
+## Deploying a Microservice to AWS ECS and AWS Cloud Map
+
+
+## Creating an HTTP API in AWS API Gateway and AWS CLoud Map
+
+
+## View and Confirm Hotel Bookings
+
+
+## Create a Review and Confirm Bookings Microservice
+
+
+## Deploying a Docker Microservice to AWS ECS with EC2 Launch Type
+
+
+## Creating an HTTP API for the ECS Microservice with EC2 Launch Type 
+
+
+## The Sidecar Pattern
+
+
+## Booking Review Sidecar Microservice
+
+
+## Deploy Booking Review Microservice 
+
+
+## Booking Review - Website Demo
+
 
 # Logging for Microservices
 
+
+## Logging Solutions in AWS
+
+
+## AWS CLoudWatch
+
+
+## Setting up AWS Cognito Identity Identity Pool for Kibana
+
+
+## Creating ELK Stack with AWS OpenSearch
+
+
+## Shipping LOgs from AWS CLoudWatch to ELK (Elasticsearch and Kibana)
+
+
+
 # The Saga Pattern
 
+
+
+## Events vs. Messages
+
+
+
+## Introduction to Saga Pattern - Orchestration vs. Choreography
+
+
+
+## Deep Dive into Choreography Pattern
+
+
+
+## Deep Dive into Orchestration Pattern
+
+
+
+## Orchestration and Choreography Patterns Comparison
+
+
+
 # Questions
+
+
+## What are the alternatives to Monolithic applications?
+
+
+## What's the anatomy of a microservice-based system?
+
+
+## Explain the Monolithic, SOA and Microservices Architectures
+
+
+## Explain Bounded Context
+
+
+## Explain the Benefits of the Microservice Architecture 
+
+
+## Explain the Role of Containers in Microservices 
+
 
