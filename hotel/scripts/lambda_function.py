@@ -6,6 +6,7 @@ import boto3
 import logging
 import multipart as python_multipart
 import base64
+import jwt
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -76,7 +77,7 @@ def handler(event, context):
     else:
         body = body.encode('utf-8')
 
-    # Create object to parse the required data.
+    # Parse the required data.
     boundary = extract_boundary(request_headers)
     fields, files = parse_form(request_headers, io.BytesIO(body), boundary)
 
@@ -96,6 +97,21 @@ def handler(event, context):
     # After .read(), the pointer is at the end; subsequent reads would return b"" (nothing).
     # Rewinding lets you reread the same stream (E.g: pass it to another function, upload to S3, hash it, etc.).
     file.file_object.seek(0)
+
+    token = jwt.decode(id_token, verify=False)
+    # A decoded jwt token will have claims, E.g: Name,address, group memberships
+    # If a user is a member of more than one group this value is comma separated.
+    group = token.get("cognito:groups")
+
+    # Some user who are only browsing the website may be part of no groups.
+    if group is None or group != "Admin":
+        return {
+                "statusCode": 401,
+                "body": json.dumps({
+                    "Error": "You are not a member of the Admin group.",
+                })
+            }
+
 
     logger.info('Some information will be presented.')
     # TODO implement

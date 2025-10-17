@@ -497,15 +497,67 @@ addHotel.html
 <br>
 <br>
 - The form data sent to AWS are caught by the **event** variable, the data will be in under the key: **body**:
-  - `body = event["body"]`
+```python
+  request_headers = event['headers']
+  body = event["body"]
+```
 - The binary photo uploaded is encoded to base64 by AWS, have a check for that
-  - `is_base64_encoded = bool(event["isBase64Encoded"])`
-- To parse the multipart form as function will have to be made: **parse_form()**
+```python
+  is_base64_encoded = bool(event["isBase64Encoded"])
+  if is_base64_encoded:
+      body = base64.b64decode('body')
+  else:
+      body = body.encode('utf-8')
+```
+- To parse the multipart form as function will have to be made: **parse_form()**.
+```python
+    boundary = extract_boundary(request_headers)
+    fields, files = parse_form(request_headers, io.BytesIO(body), boundary)
+
+    hotel_name = fields.get("hotelName")
+    hotel_rating = fields.get("hotelRating")
+    hotel_city = fields.get("hotelCity")
+    hotel_price = fields.get("hotelPrice")
+    file_name = fields.get("photo")
+    user_id = fields.get("userId")
+    id_token = fields.get("idToken")
+
+    # image
+    file = files.get("photo")
+    file_name = file.file_name.decode()
+    file_content = file.file_object.read()
+
+    # After .read(), the pointer is at the end; subsequent reads would return b"" (nothing).
+    # Rewinding lets you reread the same stream (E.g: pass it to another function, upload to S3, hash it, etc.).
+    file.file_object.seek(0)
+```
 
 ## Performing Authorisation in a Backend-Lambda
 
+- Before storing the extracted information into a database and file storage.
+- Make sure the user that invokes the backend Lambda has the **access rights** and **privileges** to create a hotel.
+- As customers should not have this ability.
+- To achieve this we use a **JSON Web Token (JWT)**
+  - **import jwt**
 
-
+```python
+token = jwt.decode(id_token, verify=False)
+```
+- A decoded jwt token will have claims, E.g: Name,address, group memberships
+- If a user is a member of more than one group this value is comma separated.
+```python
+group = token.get("cognito:groups")
+```
+- Some user who are only browsing the website may be part of no groups.
+```python
+if group is None or group != "Admin":
+    return {
+            "statusCode": 401,
+            "body": json.dumps({
+                "Error": "You are not a member of the Admin group.",
+            })
+        }
+```
 ## Storing Data and Files in AWS
 
 
