@@ -474,6 +474,33 @@ def handler(event, context):
 
 ## Capturing the Request Body in AWS Lambda as an API Backend
 
+- We would like to see, in AWS, the data we send using this form tag and parse it:
+```HTML
+addHotel.html
+<form id="upload-form" enctype="multipart/form-data"
+```
+- The **enctype** here is **"multipart/form-data"**, but it can also be **JSON**.
+- For the data sent by the form to AWS the values in the HTML tag **name** are used:
+  - hotelName 
+  - hotelRating
+  - hotelCity
+  - hotelPrice
+  - photo
+  - userId
+  - idToken
+<br>
+<br>
+- **import multipart as python_multipart**
+  - As the form type sent is: **multipart/form-date**
+- **import base64**
+  - As the photo maybe encoded to base64 by AWS (check for a form field in the multipart-form)
+<br>
+<br>
+- The form data sent to AWS are caught by the **event** variable, the data will be in under the key: **body**:
+  - `body = event["body"]`
+- The binary photo uploaded is encoded to base64 by AWS, have a check for that
+  - `is_base64_encoded = bool(event["isBase64Encoded"])`
+- To parse the multipart form as function will have to be made: **parse_form**
 
 ## Performing Authorisation in a Backend-Lambda
 
