@@ -560,6 +560,43 @@ if group is None or group != "Admin":
 ```
 ## Storing Data and Files in AWS
 
+### Databases in AWS:
+  - Relational databases:
+    - **RDS** (Offers managed services for MySQL, etc.)
+  - NO-SQL databases:
+    - **AWS Dynamo DB** (Data is stored as a JSON.)
+<br>
+<br>
+> One RDS for the entire system is OK.
+>> - However, each microservice must have its own database.
+   >>   - Microservices can not share a database.
+   >>     - No cross-database queries or access.
+
+### File Storage
+- Storing files: **S3** (Simple Storage Service)
+- Fast read/write for short term storage: **EFS** (Elastic File Storage)
+
+### Storing data with API Gateway and Lambda
+> **User**  
+⬇  
+> **Accesses hotel app**  
+⬇  
+> **Post a hotel by pushing it through an API, using API Gateway**  
+⬇  
+> **API Gateway forwards the request to AWS Lambda**  
+⬇  
+> **API Lambda uploads the image to S3**  
+⬇  
+> **API Lambda stores the text information to DynamoDB**  
+
+- By **default**, AWS Lambda:
+  - **Does not** have access to **S3** or **DynamoDB**.
+  - It **does** have access to **CloudWatch** and **execution details**.
+  > To **grant access** to **AWS Lambda** use: **IAM** Execution role (Identity and Access Management.)
+  > - Create an **execution role** in **IAM** to **give permissions**:
+  > - **Create** a **role** with **access** to **S3** and **DynamoDB**.
+
+
 
 ## Creating an Execution IAM Role for Lambda
 
