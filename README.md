@@ -500,9 +500,10 @@ addHotel.html
   - `body = event["body"]`
 - The binary photo uploaded is encoded to base64 by AWS, have a check for that
   - `is_base64_encoded = bool(event["isBase64Encoded"])`
-- To parse the multipart form as function will have to be made: **parse_form**
+- To parse the multipart form as function will have to be made: **parse_form()**
 
 ## Performing Authorisation in a Backend-Lambda
+
 
 
 ## Storing Data and Files in AWS
